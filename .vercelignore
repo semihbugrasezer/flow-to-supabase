@@ -1,0 +1,6 @@
+# Vercel ignore file
+node_modules
+.next
+.env*.local
+.DS_Store
+*.log
