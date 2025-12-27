@@ -1,0 +1,17 @@
+name: Sync Supabase Storage to DB
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call sync endpoint
+        env:
+          SYNC_SECRET: ${{ secrets.SYNC_SECRET }}
+          SYNC_URL: ${{ secrets.SYNC_URL }}
+        run: |
+          curl -sS -X POST "${SYNC_URL}?token=${SYNC_SECRET}"

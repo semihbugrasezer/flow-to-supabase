@@ -25,8 +25,13 @@ Set these in Vercel (Production and Preview):
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_KEY=YOUR_ANON_OR_PUBLISHABLE_KEY
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVICE_ROLE_KEY
 BUCKET_NAME=flow-image
 ALLOWED_ORIGIN=*
+SYNC_SECRET=YOUR_SYNC_TOKEN
+SYNC_TABLE=flow_images
+SYNC_FOLDER=
+SYNC_MAX_OBJECTS=2000
 ```
 
 ## Supabase Storage Policies
@@ -84,4 +89,33 @@ If you need manual triggering, use the bookmarklet generator:
 
 ```
 /bookmarklet-generator
+```
+
+## Storage → DB Sync (Template)
+
+```
+POST /api/sync-storage-to-db
+```
+
+Headers:
+
+```
+Authorization: Bearer YOUR_SYNC_TOKEN
+```
+
+Optional query params:
+
+```
+token=YOUR_SYNC_TOKEN
+dryRun=1
+```
+
+Notes:
+- The endpoint lists objects in `BUCKET_NAME`, filters `.jpg`, and inserts missing rows into `SYNC_TABLE`.
+- Protect it with `SYNC_SECRET` and call it from a trusted backend or an external cron that can send the token.
+
+Example (GitHub Actions cron):
+
+```
+curl -sS -X POST "https://YOUR_VERCEL_DOMAIN/api/sync-storage-to-db?token=${SYNC_SECRET}"
 ```
