@@ -112,7 +112,7 @@ export default async function handler(req, res) {
   const bucket = process.env.BUCKET_NAME || 'flow-images';
   const table = process.env.SYNC_TABLE || 'flow_images';
   const folder = process.env.SYNC_FOLDER || '';
-  const maxObjects = Math.max(parseInt(process.env.SYNC_MAX_OBJECTS, 10) || 2000, 1);
+  const maxObjects = Math.max(parseInt(process.env.SYNC_MAX_OBJECTS, 10) || 100000, 1);
 
   try {
     const supabase = getSupabaseClient();
